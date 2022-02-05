@@ -12,6 +12,9 @@ dash-bootstrap-components = "^1.0.2"
 pandas = "^1.4.0"
 requests = "^2.27.1"
 google-cloud-storage = "^2.1.0"
+elastic-enterprise-search = "^7.16.0"
+configparser = "^5.2.0"
+python-dotenv = "^0.19.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
