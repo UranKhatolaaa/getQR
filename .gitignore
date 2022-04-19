@@ -1,7 +1,6 @@
 index-json-docs.sh
 
-
-data/
+.env
 keys/
 
 # Byte-compiled / optimized / DLL files

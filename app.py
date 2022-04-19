@@ -7,6 +7,12 @@ import plotly.express as px
 
 # The data
 avocado = pd.read_csv("data/avocado.csv")
+avocado["Date"] = pd.to_datetime(avocado["Date"])
+avocado.set_index("Date", inplace=True)
+
+avocado_grpby_region = avocado.groupby(["region"])["Total Volume"].sum()
+avocado_grpby_month = avocado.groupby(pd.Grouper(freq="M")).mean()
+
 
 
 # Start of the Dash App
@@ -19,7 +25,7 @@ app = dash.Dash(
     external_stylesheets=external_stylesheets
 )
 
-app.title = "Registered Investment Advisors"
+app.title = "Avocado Price Research"
 
 header = dbc.Navbar(
     dbc.Container(
@@ -29,11 +35,11 @@ header = dbc.Navbar(
                     dbc.Col(
                         html.A(
                             html.Img(src=app.get_asset_url("logo.png")),
-                            href="https://www.google.com"
+                            href="https://www.github.com/zjohn77/dataviz"
                         )
                     ),
                     dbc.Col(
-                        dbc.NavbarBrand("Advisor Roll App")
+                        dbc.NavbarBrand("The Avocado App")
                     )
                 ],
                 align="center"
@@ -52,15 +58,15 @@ plot1 = html.Div(
         figure={
             "data": [
                 {
-                    "x": avocado["type"],
-                    "y": avocado["AveragePrice"],
+                    "x": avocado_grpby_region.index,
+                    "y": avocado_grpby_region,
                     "type": "bar",
                     "hovertemplete": "%{y:.2f}" "<extra></extra>"
                 }
             ],
             "layout": {
                 "title": {
-                    "text": "Average Price by Organic vs Conventional",
+                    "text": "Total Volume by Region",
                     "x": 0.05,
                     "xanchor": "left"
                 },
@@ -76,17 +82,36 @@ plot1 = html.Div(
     className="card"
 )
 
-fig = px.line(avocado, x='Date', y="AveragePrice")
-
 plot2 = html.Div(
     children=dcc.Graph(
-        id="status-time-chart",
+        id="date-chart",
         config={"displayModeBar": False},
-        figure=fig
+        figure={
+            "data": [
+                {
+                    "x": avocado_grpby_month.index,
+                    "y": avocado_grpby_month["AveragePrice"],
+                    "type": "line",
+                    "hovertemplete": "%{y:.2f}" "<extra></extra>"
+                }
+            ],
+            "layout": {
+                "title": {
+                    "text": "Average Price by Year",
+                    "x": 0.05,
+                    "xanchor": "left"
+                },
+                "xaxis": {"fixedrange": True},
+                "yaxis": {
+                    "tickprefix": "",
+                    "fixedrange": True
+                },
+                "colorway": ["#17B897"]
+            }
+        }
     ),
     className="card"
 )
-
 
 # The bootstrap grid
 dashboard = dbc.Container(
@@ -98,7 +123,7 @@ dashboard = dbc.Container(
     ],
     fluid=False
 )
-
+# 
 app.layout = html.Div(
     children=[
         header,
@@ -111,7 +136,7 @@ server = app.server
 
 
 if __name__ == "__main__":
-
+    # print(avocado_grpby_region.head())
     app.run_server(
         debug=True,
         host="0.0.0.0",
