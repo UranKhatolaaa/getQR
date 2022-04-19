@@ -36,3 +36,4 @@ At this point, your Plotly Dash app should be ready to be used.
 poetry shell
 gunicorn app:server
 ```
+Once the gunicorn server is up and running, point your browser to [localhost:8000](http://localhost:8000/)

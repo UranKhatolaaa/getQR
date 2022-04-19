@@ -14,7 +14,6 @@ avocado_grpby_region = avocado.groupby(["region"])["Total Volume"].sum()
 avocado_grpby_month = avocado.groupby(pd.Grouper(freq="M")).mean()
 
 
-
 # Start of the Dash App
 external_stylesheets = [
     dbc.themes.BOOTSTRAP
@@ -123,7 +122,7 @@ dashboard = dbc.Container(
     ],
     fluid=False
 )
-# 
+#
 app.layout = html.Div(
     children=[
         header,
@@ -136,7 +135,6 @@ server = app.server
 
 
 if __name__ == "__main__":
-    # print(avocado_grpby_region.head())
     app.run_server(
         debug=True,
         host="0.0.0.0",
